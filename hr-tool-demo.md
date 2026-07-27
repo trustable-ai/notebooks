@@ -50,6 +50,9 @@ Produce an ordered implementation checklist covering:
 
 Finish this phase with the architecture and checklist only. Do not begin implementation yet.
 
+
+---
+
 # Phase 2 - Build the data, authentication, and authorisation foundation
 
 Continue from the approved architecture and checklist from Phase 1.
@@ -123,6 +126,9 @@ Before completing this phase, verify with real APIs:
 
 Do not perform the complete product browser E2E yet. Record focused results and update the checklist.
 
+
+---
+
 # Phase 3 - Implement employee management and employment history
 
 Continue from the authenticated foundation. Do not work on file uploads or structured CV storage in this phase.
@@ -192,6 +198,9 @@ Verify with recognisable real test data:
 
 Keep the test employee available for the later file and turnover phases. Update the checklist.
 
+
+---
+
 # Phase 4 - Implement photographs, CV files, and structured CV profiles
 
 Continue from the real employee created in Phase 3.
@@ -254,6 +263,9 @@ Verify against the employee retained from Phase 3:
 
 Update the checklist with real results.
 
+
+---
+
 # Phase 5 - Implement turnover, dashboard statistics, and Redis caching
 
 Continue from the real employees and employment events created in the previous phases.
@@ -307,6 +319,9 @@ Verify with known hires, transfers, and departures:
 - deterministic React validation and dashboard browser behaviour.
 
 Update the checklist and retain the data required for final E2E verification.
+
+
+---
 
 # Phase 6 - Complete user administration and harden the product UX
 
@@ -370,6 +385,9 @@ Verify:
 - deterministic React validation and the administrator browser flow.
 
 Update the checklist. Do not declare the whole application complete yet.
+
+
+---
 
 # Phase 7 - Run final validation and prove the deployed application
 
