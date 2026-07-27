@@ -1,99 +1,135 @@
-# Phase 1 — Project Analysis, Architecture, Authentication, and Authorisation
+# Phase 1 - Analyse the project and define the implementation plan
 
-Transform the current application into **“Nuvolaris HR”**, a professional human resources management platform.
+Transform the current application into **Nuvolaris HR**, a professional human-resources management platform.
 
-Do not create a new application. Do not stop at a scaffold, prototype, or mocked implementation.
+Do not create a new application. Reuse the current architecture, directory structure, components, design system, coding conventions, backend patterns, official service bindings, and deployment workflow. Do not replace working parts unnecessarily.
 
-The user interface must be in Italian.
+The user interface must be in Italian. The implementation must use real persisted data and must not stop at a scaffold, prototype, frontend-only flow, static placeholder, or mocked response.
 
-## Initial project analysis
+## Analysis only
 
-Before making changes, fully analyse the existing project and reuse its current:
+In this phase, analyse the project without modifying files, creating actions, changing infrastructure data, or deploying anything.
 
-- architecture;
-- directory structure;
-- components;
-- design system;
-- coding conventions;
-- backend patterns;
-- integrations;
-- official bindings;
-- deployment workflow.
+Inspect the project and identify:
 
-Do not replace working parts unnecessarily.
+- the existing frontend architecture, routes, components, styles, and state management;
+- the existing backend actions and API conventions;
+- the available official PostgreSQL, Redis, MongoDB, and S3 integrations;
+- the current authentication and authorisation state;
+- the existing test, typecheck, build, watcher, and browser-verification commands;
+- reusable code and any missing capabilities.
 
-Maintain an updated checklist throughout the work. It must include at least:
+Define the target architecture and data ownership:
 
-- architecture and data model;
-- authentication;
-- employee backend;
-- file and CV management;
-- turnover;
-- frontend;
-- user administration;
-- tests and browser verification.
+- PostgreSQL: users, roles, departments, employees, reporting relationships, employment status, and employment events;
+- Redis: application sessions and dashboard-statistics caching;
+- S3: employee photographs and PDF CV files;
+- MongoDB: structured CV profiles, CV version metadata, and manually maintained CV content.
 
-## Authentication and authorisation
+Produce an ordered implementation checklist covering:
 
-Implement complete authentication with:
+- database and idempotent setup;
+- authentication and role enforcement;
+- employee APIs and screens;
+- photographs and CV files;
+- structured CV profiles;
+- employment events, turnover, and dashboard;
+- administrator user management;
+- responsive and defensive UX;
+- tests, typecheck, build, runtime checks, and final browser verification.
 
-- initial setup of the first administrator;
-- login and logout;
-- persistent sessions with correctly managed expiration;
-- redirect to the dashboard after login;
-- redirect to the login page when an unauthenticated user visits a protected page;
-- backend API protection, not only frontend route protection;
-- passwords stored exclusively using secure password hashing;
-- no credentials or secrets exposed in the frontend, logs, or API responses.
+## Execution rules for all subsequent phases
 
-Implement two roles:
+- Use only official integrations and bindings already available in the project.
+- Do not invent hostnames, URLs, credentials, secrets, environment variables, or unsupported bindings.
+- Treat generated `.env` files and generated action wrappers as host-owned artifacts.
+- Never expose credentials, connection strings, tokens, session identifiers, internal URLs, or storage secrets in frontend code, browser storage, responses, logs, errors, or model-visible files.
+- Do not run `ops ide deploy` or start another `ops ide devel`. The managed watcher owns normal live updates.
+- After a coherent batch that creates one or more new OpenServerless actions, use the managed runtime redeploy tool once when required by the runtime, then continue with watcher status and real endpoint verification.
+- Do not ask the user to execute technical commands. Diagnose and resolve implementation errors autonomously using the managed tools.
 
-- **Administrator**: full access, including user management;
-- **HR Manager**: access to employee, CV, and turnover management, but no access to administrator management.
+Finish this phase with the architecture and checklist only. Do not begin implementation yet.
 
-The administrator panel must allow administrators to:
+# Phase 2 - Build the data, authentication, and authorisation foundation
 
-- create users;
-- change user roles;
-- deactivate accounts;
-- reactivate accounts.
+Continue from the approved architecture and checklist from Phase 1.
 
-A deactivated user must immediately lose access and must not be able to create new authenticated sessions.
+## Idempotent relational foundation
 
-Use Redis for application sessions.
+Create or extend an idempotent PostgreSQL setup for:
 
-Use PostgreSQL as the authoritative data source for users and authorisation-related data.
+- users;
+- roles;
+- account activation status;
+- departments;
+- employees;
+- manager and reporting relationships;
+- employment events;
+- file metadata needed to associate S3 objects and CV versions with employees.
 
-Protect every relevant backend endpoint with authentication and role-based authorisation.
+Use stable identifiers, appropriate uniqueness constraints, foreign keys, timestamps, and indexes. Setup must be safe to execute more than once and must preserve existing valid data.
 
-Do not expose credentials, connection strings, tokens, session identifiers, or storage secrets in:
+## Authentication
 
-- frontend code;
-- browser responses;
-- browser storage beyond what is strictly required for secure session handling;
-- logs;
-- error messages;
-- API payloads.
+Implement complete real authentication with:
 
-After completing this phase, deploy the required backend changes and verify:
-
-- first-administrator setup;
+- one-time setup of the first administrator;
 - login;
 - logout;
-- session persistence;
-- session expiration;
-- protected-page redirects;
-- protected API behaviour;
-- administrator and HR Manager permissions;
-- deactivated-account access denial.
+- current-session or `me` validation;
+- persistent Redis-backed sessions;
+- bounded and correctly enforced session expiration;
+- secure password hashing;
+- server-side session invalidation;
+- backend protection for every protected API.
 
----
+Use Redis-backed opaque sessions. Every Redis key must derive from the official application prefix. Do not implement JWT-based application authentication and do not create application secrets or edit environment files.
 
-# Phase 2 — Employee Management, Files, and CVs
+## Authorisation model
 
-## Employee management
+Implement these roles:
 
-Implement a complete employee CRUD using real persisted data.
+- **Administrator**: full access, including user administration;
+- **HR Manager**: access to employee, CV, event, turnover, and dashboard capabilities, but no access to user administration.
+
+Centralise backend authentication and role checks so frontend route protection is never the only security boundary. Every authenticated request must verify that the user still exists and is active, so a deactivated account immediately loses access even if it holds an older session.
+
+The frontend foundation must provide:
+
+- an Italian first-administrator setup screen;
+- an Italian login screen;
+- logout;
+- redirect to the dashboard after login;
+- redirect to login when an unauthenticated visitor opens a protected page;
+- a loading state while the existing session is validated;
+- safe handling of expired or invalid sessions.
+
+Create and wire the complete authentication action set coherently. If new actions require managed redeploy, perform it once after the complete batch, never through shell commands.
+
+## Focused verification
+
+Before completing this phase, verify with real APIs:
+
+- first-administrator setup can run exactly when allowed;
+- duplicate first-administrator setup is rejected safely;
+- login succeeds with valid credentials and fails safely otherwise;
+- password hashes and session values are never returned;
+- `me` validates a live session;
+- logout invalidates the session;
+- session expiration is enforced;
+- unauthenticated protected API requests are denied;
+- HR Manager access to administrator-only APIs is denied;
+- an inactive account cannot create or retain a valid session.
+
+Do not perform the complete product browser E2E yet. Record focused results and update the checklist.
+
+# Phase 3 - Implement employee management and employment history
+
+Continue from the authenticated foundation. Do not work on file uploads or structured CV storage in this phase.
+
+## Employee domain
+
+Implement complete employee CRUD using PostgreSQL as the authoritative source.
 
 Each employee must support:
 
@@ -109,57 +145,74 @@ Each employee must support:
 - status: active, leaving, or terminated;
 - departure date;
 - departure reason;
-- notes;
-- photograph;
-- CV.
+- notes.
 
-Use PostgreSQL as the authoritative source for:
+Record a reliable employment-event history containing at least:
 
-- employees;
-- departments;
-- managers and reporting relationships;
-- employment status;
-- employment events.
+- hiring;
+- transfer or department/manager change;
+- termination.
 
-The employee list must support:
+Employee mutations must update employee state and append the corresponding event consistently. Validate dates, identifiers, required fields, status transitions, manager references, and duplicate email or employee IDs on the backend.
 
-- search;
-- filters by department, role, and status;
+## Employee interface
+
+Implement the Italian employee section with:
+
+- a searchable employee list;
+- filters by department, company role, and status;
 - sorting;
 - pagination;
-- empty states;
-- loading states;
-- error states;
-- access to the complete employee profile.
+- loading, empty, validation, and error states;
+- employee creation and editing forms;
+- a complete employee profile;
+- current employment information;
+- employment-event history;
+- clear success and failure notifications.
 
-The employee profile must show:
+The profile may show an honest empty state for photograph and CV capabilities that will be implemented in Phase 4. Do not use fake files or simulated CV data.
 
-- personal details;
-- photograph;
-- current employment situation;
-- employment event history;
-- CV information.
+Protect every employee and employment-event endpoint for Administrator and HR Manager roles. Unauthenticated users must receive an authentication failure, not partial data.
 
-## Photographs and CV files
+If this phase creates new actions, complete the coherent action and connector batch before invoking the managed redeploy once. Ordinary source changes remain owned by the watcher.
 
-Allow users to upload, replace, view, and delete:
+## Focused verification
 
-- one employee photograph;
-- one or more CV files in PDF format.
+Verify with recognisable real test data:
 
-Maintain a simple version history for CV files.
+- employee creation;
+- employee editing;
+- duplicate and invalid input rejection;
+- search, filters, sorting, and pagination;
+- complete employee profile retrieval;
+- hiring, transfer, and termination history;
+- authentication and role enforcement on every employee endpoint;
+- Italian loading, empty, success, and error states;
+- deterministic React validation and the employee browser flow.
 
-Validate file type and file size on both the frontend and backend.
+Keep the test employee available for the later file and turnover phases. Update the checklist.
 
-Use S3 for photographs and PDF files.
+# Phase 4 - Implement photographs, CV files, and structured CV profiles
 
-The browser must not connect directly to the storage service and must never receive storage credentials.
+Continue from the real employee created in Phase 3.
 
-All file operations must go through protected backend endpoints.
+## Photograph and PDF storage
 
-## Structured CV profiles
+Use S3 only through protected backend actions to support:
 
-For every CV, store an editable structured profile containing:
+- one current employee photograph;
+- photograph upload, display, replacement, and deletion;
+- one or more PDF CV files;
+- CV upload, download or protected viewing, replacement, and deletion;
+- a simple ordered CV version history.
+
+Validate allowed MIME type, extension, and file size on both frontend and backend. Generate safe server-owned object keys. Never trust a browser-supplied bucket or unrestricted object path.
+
+The browser must never connect directly to S3 and must never receive S3 credentials. S3 mutations belong in protected backend actions using the official binding.
+
+## Structured CV data
+
+Use MongoDB for an editable structured profile associated with each employee and CV version. It must contain:
 
 - professional summary;
 - skills;
@@ -168,50 +221,50 @@ For every CV, store an editable structured profile containing:
 - languages;
 - date of the latest update.
 
-Use MongoDB for:
+Do not implement AI-based CV parsing. Structured information is entered and maintained manually.
 
-- structured CV profiles;
-- CV version history and related metadata.
+Keep PostgreSQL employee/file references, S3 objects, and MongoDB structured records consistently associated. Design compensation or cleanup for partial failures so a failed S3 or MongoDB operation does not leave a false successful PostgreSQL record or crash the entire interface.
 
-Do not implement AI-based CV parsing. In this version, structured CV information must be entered and maintained manually.
+## CV interface
 
-Ensure that file metadata, version history, and structured CV data remain correctly associated with the corresponding employee.
+Extend the Italian employee profile with:
 
-Handle partial failures safely. For example, a failed storage or MongoDB operation must not leave inconsistent PostgreSQL records or make the entire interface crash.
+- photograph controls and preview;
+- CV upload and protected view/download actions;
+- visible CV version history;
+- structured CV view and edit forms;
+- file validation messages;
+- recoverable service errors without blank pages or leaked internals.
 
-After every coherent group of backend changes, perform the required deployment.
+If new actions are created, use the managed redeploy once after the complete file/CV action batch. Do not run deployment commands manually.
 
-Before completing this phase, verify with real test data:
+## Focused verification
 
-- employee creation;
-- employee editing;
-- employee search and filtering;
-- access to the complete employee profile;
+Verify against the employee retained from Phase 3:
+
 - photograph upload, display, replacement, and deletion;
-- PDF CV upload, display, versioning, replacement, and deletion;
-- structured CV profile creation and editing;
-- validation of unsupported or oversized files;
-- authorisation of every employee and file endpoint.
+- valid PDF upload, view/download, replacement, versioning, and deletion;
+- unsupported and oversized file rejection;
+- structured CV creation and editing;
+- correct employee association across PostgreSQL, S3, and MongoDB;
+- protected access for Administrator and HR Manager;
+- unauthenticated rejection;
+- recoverable behaviour for a simulated malformed service response without exposing secrets;
+- deterministic React validation and the complete profile browser flow.
 
----
+Update the checklist with real results.
 
-# Phase 3 — Turnover, Dashboard, User Administration, and UX
+# Phase 5 - Implement turnover, dashboard statistics, and Redis caching
 
-## Turnover and employment events
+Continue from the real employees and employment events created in the previous phases.
 
-Create a reliable employment-event history containing at least:
+## Turnover calculations
 
-- hiring;
-- transfer;
-- termination.
+Use PostgreSQL employment events as the authoritative source. Do not use hardcoded, random, static, or simulated figures.
 
-Turnover must be calculated from real data and actual employment events.
+Implement an HR dashboard showing:
 
-Do not use hardcoded, random, or simulated figures.
-
-Implement an HR dashboard with:
-
-- total number of employees;
+- total employees;
 - active employees;
 - new hires during the selected period;
 - departures during the selected period;
@@ -225,146 +278,160 @@ Allow the user to:
 - select the analysis period;
 - filter dashboard data by department.
 
-Use Redis to cache dashboard statistics.
+Define the turnover formula explicitly and handle empty periods without division errors or misleading percentages.
 
-Employee and employment-event changes must correctly invalidate all affected cache entries.
+## Redis cache
 
-Use PostgreSQL as the authoritative source for dashboard and turnover calculations.
+Cache expensive dashboard statistics in Redis using only keys derived from the official application prefix. Cache keys must include every dimension that changes the result, including period and department.
 
-## User administration
+Employee and employment-event mutations must invalidate every affected dashboard cache entry. PostgreSQL remains authoritative: a missing or stale cache entry is rebuilt from real relational data.
 
-Create an administrator-only user-management section that supports:
+Do not expose cache keys, credentials, connection details, or raw Redis diagnostics in the browser.
 
-- user creation;
-- role changes;
-- account deactivation;
-- account reactivation;
-- clear account-status visibility;
-- validation and understandable error messages.
+If new dashboard actions are created, complete them before one managed redeploy. Do not deploy ordinary edits manually.
 
-HR Managers must not be able to open or use administrator-management pages or APIs.
+## Focused verification
 
-## Professional user experience
+Verify with known hires, transfers, and departures:
 
-Create a professional, consistent, responsive, and accessible interface.
+- every dashboard total against the corresponding PostgreSQL data;
+- period selection;
+- department filtering;
+- monthly trends;
+- zero-data periods;
+- cache miss followed by cache population;
+- cache reuse for an identical query;
+- invalidation after employee or employment-event changes;
+- correct recalculation after invalidation;
+- authentication and role enforcement;
+- deterministic React validation and dashboard browser behaviour.
 
-Include:
+Update the checklist and retain the data required for final E2E verification.
+
+# Phase 6 - Complete user administration and harden the product UX
+
+Continue from the secure role model built in Phase 2.
+
+## Administrator-only user management
+
+Implement the backend and Italian administrator interface for:
+
+- creating users;
+- assigning Administrator or HR Manager roles;
+- changing roles;
+- deactivating accounts;
+- reactivating accounts;
+- clearly displaying account status;
+- validating duplicate users and invalid transitions;
+- understandable errors without sensitive details.
+
+Only Administrators may open or invoke user-management pages and APIs. HR Managers must be denied server-side even if they call an endpoint directly.
+
+Deactivation must immediately invalidate existing sessions and prevent new login. Reactivation restores login capability but must not revive old invalidated sessions.
+
+## Complete professional UX
+
+Unify the application into a professional, responsive, accessible Italian interface with:
 
 - side navigation;
 - dashboard;
 - employees section;
 - turnover section;
-- user administration section;
+- administrator-only user section;
 - profile menu;
 - logout action;
-- forms with validation;
+- validated forms;
 - confirmation prompts for destructive operations;
 - clear notifications;
 - skeletons or loading indicators;
-- safe error handling without blank pages;
-- understandable messages without stack traces or sensitive information.
+- useful empty states;
+- recoverable error states;
+- responsive desktop and mobile layouts.
 
-The interface must be in Italian.
+A malformed API response or one failed backend service must not crash the complete interface. Add defensive response handling and appropriate error boundaries or equivalent safeguards. Never show stack traces, infrastructure internals, tokens, or connection details.
 
-A malformed API response or the failure of a single service must not crash the entire interface.
+The application must work in the current development environment and after deployment without hardcoded domains, hosts, ports, or URLs. The frontend must never connect directly to PostgreSQL, Redis, MongoDB, or S3.
 
-Implement defensive response handling and appropriate error boundaries or equivalent safeguards.
+Use the managed redeploy only if this phase introduces new actions. Let the watcher apply normal frontend and backend source edits.
 
-The application must work:
+## Focused verification
 
-- in the current development environment;
-- after deployment;
-- without hardcoded domains, hosts, or URLs.
+Verify:
 
-Use all available components for their intended responsibilities:
+- Administrator user creation, role change, deactivation, and reactivation;
+- immediate loss of access for a deactivated signed-in user;
+- old sessions remain invalid after reactivation;
+- HR Manager cannot view or call administrator management;
+- navigation visibility follows role without replacing backend enforcement;
+- destructive confirmations and validation messages;
+- mobile and desktop navigation;
+- graceful handling of malformed and failed API responses;
+- absence of blank pages and sensitive errors;
+- deterministic React validation and the administrator browser flow.
 
-- PostgreSQL for users, employees, departments, and employment events;
-- MongoDB for structured CV profiles and CV version history;
-- S3 for photographs and PDF files;
-- Redis for application sessions and dashboard-statistics caching.
+Update the checklist. Do not declare the whole application complete yet.
 
-Use only the official integrations and bindings already available in the project.
+# Phase 7 - Run final validation and prove the deployed application
 
-Do not invent:
+Proceed autonomously until the complete application is verified. Fix root causes rather than suppressing failures, and do not ask the user to execute technical commands.
 
-- hostnames;
-- URLs;
-- credentials;
-- secrets;
-- environment variables;
-- unsupported service bindings.
+## Build and runtime gates
 
-Do not connect the frontend directly to infrastructure services.
+Before browser E2E:
 
-After every coherent group of backend changes, perform the required deployment.
+- run the frontend typecheck;
+- run the frontend production build;
+- run relevant backend and application tests;
+- resolve every actionable error;
+- if a pending new-action batch still requires managed redeploy, invoke the managed runtime redeploy once before verification;
+- inspect the authoritative managed watcher status;
+- run the prescribed application checker once for the current revision;
+- run deterministic React validation;
+- verify real HTTP endpoints.
 
-Run the frontend typecheck and build before the final verification phase.
+Do not run `ops ide deploy`, start another watcher, inspect generated ZIP files, or repeat unchanged checks in a loop.
 
----
+## Final browser E2E
 
-# Phase 4 — Testing, Deployment, and Final Browser Verification
+Use the managed browser against the real deployed application and verify:
 
-Proceed autonomously until the application is complete.
-
-When an error occurs:
-
-- identify and fix the actual root cause;
-- redeploy when required;
-- continue the work;
-- do not ask the user to execute technical commands.
-
-Do not consider mocked responses, static placeholders, or frontend-only behaviour to be a valid implementation.
-
-Use recognisable test data. Remove it at the end when removal does not prevent the user from inspecting the completed application.
-
-Before declaring the work complete, verify the real deployed application in the browser.
-
-The final browser verification must include:
-
-1. initial administrator setup;
+1. initial administrator setup when the installation is uninitialised;
 2. login and redirect to the dashboard;
-3. denied access to protected pages without authentication;
-4. creation of an employee;
-5. editing and searching for the employee;
-6. uploading and viewing the employee photograph and CV;
-7. updating the structured CV profile;
-8. recording an employee departure;
-9. automatic update of turnover statistics;
-10. creation and management of an HR Manager account;
-11. verification that the HR Manager cannot access administrator management;
-12. account deactivation and verification that the deactivated user can no longer log in;
-13. logout and session invalidation;
-14. verification of filtering, sorting, pagination, loading, empty, and error states;
-15. verification that unsupported or oversized files are rejected safely;
-16. verification that dashboard caching is invalidated after relevant employee or employment-event changes;
-17. verification that the interface remains usable when an individual backend service returns an unexpected response;
-18. confirmation that there are no errors in the browser console;
-19. confirmation that no credentials, secrets, tokens, stack traces, internal URLs, or sensitive connection details appear in browser responses, logs, or console output;
-20. confirmation that the deployed application uses real PostgreSQL, MongoDB, S3, and Redis integrations.
+3. denied protected pages and APIs without authentication;
+4. employee creation;
+5. employee editing, search, filtering, sorting, and pagination;
+6. complete employee profile and employment history;
+7. photograph upload, display, replacement, and deletion;
+8. PDF CV upload, protected viewing, versioning, replacement, and deletion;
+9. structured CV profile creation and editing;
+10. employee departure recording;
+11. correct turnover and dashboard updates;
+12. dashboard cache invalidation after relevant mutations;
+13. HR Manager user creation and permitted HR workflows;
+14. denied administrator UI and APIs for the HR Manager;
+15. account deactivation and immediate session rejection;
+16. reactivation without restoration of the old session;
+17. logout and session invalidation;
+18. loading, empty, validation, error, and destructive-confirmation states;
+19. unsupported and oversized file rejection;
+20. graceful handling of an individual malformed backend response;
+21. responsive navigation on desktop and mobile;
+22. no browser-console errors;
+23. no credentials, secrets, session values, stack traces, internal URLs, or connection details in browser-visible output;
+24. real PostgreSQL, Redis, MongoDB, and S3 behaviour with no mocked fallback.
 
-Do not declare the work complete until all of the following work together in the actually deployed application:
+Use recognisable test data. Remove it only when removal does not prevent the user from inspecting the completed application.
 
-- authentication;
-- authorisation;
-- employee CRUD;
-- photographs;
-- CV files and version history;
-- structured CV profiles;
-- employment events;
-- turnover calculations;
-- dashboard;
-- user administration;
-- responsive navigation;
-- error handling;
-- session invalidation;
-- backend API protection.
+Do not declare completion until authentication, authorisation, employee CRUD, photographs, CV files and versions, structured CV profiles, employment events, turnover, dashboard, user administration, responsive navigation, error handling, cache invalidation, session invalidation, backend protection, and all four official service integrations work together.
 
-At the end, provide a concise completion report containing:
+## Completion report
+
+Finish with a concise report containing:
 
 - the implemented architecture;
-- the data model used in each service;
+- the data model and ownership used in each service;
 - the completed checklist;
-- deployments performed;
-- tests, typechecks, and builds executed;
+- managed redeploys performed and why they were required;
+- tests, typechecks, builds, runtime checks, and React validation executed;
 - browser scenarios verified;
-- any remaining known limitation, if one genuinely exists.
+- any genuine remaining limitation.
