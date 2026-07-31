@@ -6,3 +6,5 @@
 - [Atlas Evidence Vault](evidence-vault-demo.md) S3-backed evidence workflow and managed-connection demo
 
 - [security-check](security-check.md)
+
+- [Simple Demo 2](simple-demo-2.md)
