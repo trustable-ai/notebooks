@@ -33,7 +33,6 @@ Requirements:
 Implement the Customers page.
 
 Features:
-
 - Display all customers in a searchable list.
 - Add a new customer.
 - Edit an existing customer.
