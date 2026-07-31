@@ -8,3 +8,5 @@
 - [security-check](security-check.md)
 
 - [Simple Demo 2](simple-demo-2.md)
+
+- [Gestionale Clienti](gestionale-clienti.md)
