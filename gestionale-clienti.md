@@ -1,3 +1,20 @@
+# Step 3 — Build the Activity Dashboard
+
+Implement the Home page as a task dashboard.
+
+Features:
+
+- Show all upcoming activities sorted by due date (ascending).
+- Display the associated customer for every activity.
+- Each activity must provide the following actions:
+  - Mark as completed
+  - Postpone (choose another date)
+  - Delete
+- Completed activities should be visually distinguished.
+- Keep the list automatically ordered after every modification.
+
+---
+
 # Step 2 — Implement Customer Management
 
 Implement the Customers page.
