@@ -1,17 +1,30 @@
-# Step 3 — Build the Activity Dashboard
+# Step 1 — Create the Mini CRM Foundation
 
-Implement the Home page as a task dashboard.
+Build a clean and modern Mini CRM application.
 
-Features:
+The application manages customers and their scheduled activities.
 
-- Show all upcoming activities sorted by due date (ascending).
-- Display the associated customer for every activity.
-- Each activity must provide the following actions:
-  - Mark as completed
-  - Postpone (choose another date)
-  - Delete
-- Completed activities should be visually distinguished.
-- Keep the list automatically ordered after every modification.
+Requirements:
+
+- Create a responsive layout.
+- Add a Home page.
+- Add a Customers page.
+- Define a customer model containing:
+  - id
+  - name
+  - company (optional)
+  - email (optional)
+  - phone (optional)
+  - notes (optional)
+- Define an activity model containing:
+  - id
+  - customerId
+  - title
+  - description (optional)
+  - dueDate
+  - completed
+- Use mock data stored in memory.
+- Keep the code modular and easy to extend.
 
 ---
 
@@ -28,6 +41,23 @@ Features:
 - Clicking a customer opens its details.
 - Use reusable forms and components.
 - Keep the UI simple and modern.
+
+---
+
+# Step 3 — Build the Activity Dashboard
+
+Implement the Home page as a task dashboard.
+
+Features:
+
+- Show all upcoming activities sorted by due date (ascending).
+- Display the associated customer for every activity.
+- Each activity must provide the following actions:
+  - Mark as completed
+  - Postpone (choose another date)
+  - Delete
+- Completed activities should be visually distinguished.
+- Keep the list automatically ordered after every modification.
 
 ---
 
@@ -95,31 +125,3 @@ General requirements:
 - Avoid page reloads by updating the interface reactively.
 
 ---
-
-# Step 1 — Create the Mini CRM Foundation
-
-Build a clean and modern Mini CRM application.
-
-The application manages customers and their scheduled activities.
-
-Requirements:
-
-- Create a responsive layout.
-- Add a Home page.
-- Add a Customers page.
-- Define a customer model containing:
-  - id
-  - name
-  - company (optional)
-  - email (optional)
-  - phone (optional)
-  - notes (optional)
-- Define an activity model containing:
-  - id
-  - customerId
-  - title
-  - description (optional)
-  - dueDate
-  - completed
-- Use mock data stored in memory.
-- Keep the code modular and easy to extend.
