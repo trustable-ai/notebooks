@@ -9,4 +9,4 @@
 
 - [Simple Demo 2](simple-demo-2.md)
 
-- [Gestionale Clienti](gestionale-clienti.md)
+- [Mini CRM](mini-crm.md)
