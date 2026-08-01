@@ -131,39 +131,59 @@ Prepare the application for deployment while keeping all features fully function
 
 ---
 
-# 6 - Interactive dashboard, clickable statistics and full mobile responsiveness
+# 6 - Complete responsive redesign and interactive dashboard
 
-Enhance the Project Dashboard Task application by improving navigation, usability and responsiveness.
+Completely redesign the UI to provide a true mobile-first responsive experience without changing any existing functionality.
 
-Make every statistics card on the Home Dashboard fully clickable.
+Every page, component and layout must be reviewed and refactored if necessary.
 
-Clicking a statistics card must automatically navigate to the Tasks page with the corresponding filters already applied. Examples:
-- Total Tasks → show all tasks
-- Completed Tasks → show only completed tasks
-- Pending Tasks → show only pending tasks
-- Overdue Tasks → show only overdue tasks
-- High Priority → show only high priority tasks
-- A category card → show only tasks from that category
+Responsive requirements:
 
-Ensure filters are synchronized with the URL or application state so they persist after navigation.
+- Use Tailwind responsive breakpoints (sm, md, lg, xl).
+- Design mobile-first, then progressively enhance for larger screens.
+- There must never be horizontal scrolling.
+- Every page must be fully usable at widths from 320px to 1920px.
 
-Improve the overall user experience by:
-- Adding hover, focus and active states
-- Making cards keyboard accessible
-- Displaying clear loading and empty states
-- Preserving selected filters when returning to the dashboard
+Navigation:
+- On mobile replace the sidebar with a hamburger menu or slide drawer.
+- Collapse navigation when screen width is small.
+- Keep navigation accessible on every device.
 
-Make the entire application fully mobile responsive.
+Dashboard:
+- Statistic cards must become a 1-column layout on phones.
+- Use 2 columns on tablets.
+- Use 3–4 columns on desktop depending on available space.
+- Cards must have equal height.
+- Cards must never overflow.
 
-Optimize every page for phones, tablets and desktops by ensuring:
-- Responsive navigation
-- Responsive dashboard cards
-- Responsive task list and forms
-- Proper spacing and typography on small screens
-- No horizontal scrolling
-- Buttons remain easy to tap
-- Dialogs and forms fit small displays
-- Statistics cards wrap correctly
-- Tables become responsive cards when necessary
+Interactive statistics:
+- Every statistic card must be clickable.
+- Clicking a card opens the Tasks page with the correct filter already applied.
+- Selected filters remain active until changed by the user.
 
-Review every page and component to guarantee a consistent responsive layout, smooth navigation and a polished user experience across all supported screen sizes.
+Task list:
+- Replace desktop tables with stacked task cards on mobile.
+- Desktop may continue using a table or grid.
+- Buttons must wrap correctly.
+- Long titles must truncate gracefully.
+- Filters become collapsible on small screens.
+
+Forms:
+- Inputs occupy full width on phones.
+- Buttons stack vertically when necessary.
+- Labels remain readable.
+- Dialogs never exceed viewport width.
+
+General UI:
+- All buttons must have a minimum touch target of 44×44 px.
+- Typography scales using responsive Tailwind classes.
+- Consistent spacing across breakpoints.
+- Images and icons scale correctly.
+- Cards, modals and containers adapt fluidly.
+
+Quality checks:
+- Test layouts at approximately 320px, 375px, 768px, 1024px, 1440px and 1920px.
+- Fix every overflow, clipping, misalignment or broken layout.
+- Preserve all existing functionality while improving only the UI and responsiveness.
+
+The application should feel like a production-quality responsive web app, not simply a desktop layout that shrinks on mobile.
