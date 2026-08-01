@@ -11,4 +11,4 @@
 
 - [Mini CRM](mini-crm.md)
 
-- [testing for now (API Status Monitor)](TEST-api-status-monitor.md)
+- [API Status Monitor](api-status-monitor.md)
