@@ -1,122 +1,131 @@
-# 1 - Setup progetto e architettura base
+# 1 - Project setup and initial working interface
 
-Crea una nuova applicazione Project Dashboard Task con React + Tailwind CSS.
+Create a new application called Project Dashboard Task using React and Tailwind CSS.
 
-Configura una struttura pulita con:
-- Dashboard principale
-- Gestione attività
-- Componenti UI riutilizzabili
-- Servizi separati per database e API
+Set up a clean architecture with:
+- Dashboard page
+- Tasks page
+- Reusable UI components
+- Services folder for future integrations
 
-Prepara l'integrazione con Nuvolaris OpenServerless per eventuali funzioni backend serverless.
+Prepare the project structure for MongoDB, Redis, TodoWrite and Nuvolaris OpenServerless integrations without implementing them yet.
 
-Implementa una prima versione funzionante con:
-- Layout responsive
-- Sidebar o menu di navigazione
-- Dashboard vuota pronta per statistiche
-- Pagina attività con lista iniziale
-- Stato globale minimo necessario
+Build a fully working first version containing:
+- Responsive layout
+- Sidebar or top navigation
+- Dashboard page
+- Tasks page
+- Local mock tasks stored in memory
+- Ability to mark mock tasks as completed
+- Basic task cards
+- Working navigation between pages
 
-Assicurati che l'applicazione sia avviabile e funzionante prima di aggiungere nuove feature.
-
----
-
-# 2 - Sistema gestione attività con MongoDB e TodoWrite
-
-Implementa il sistema completo di gestione task.
-
-Ogni attività deve avere:
-- Titolo
-- Descrizione
-- Categoria
-- Priorità (bassa, media, alta)
-- Data di scadenza
-- Stato (da fare, in corso, completata)
-- Data creazione
-
-Usa MongoDB per salvare le attività.
-
-Crea API o funzioni serverless tramite Nuvolaris OpenServerless per:
-- Creare attività
-- Modificare attività
-- Eliminare attività
-- Recuperare lista attività
-
-Integra TodoWrite per gestire le operazioni sulle attività.
-
-Aggiungi una UI completa con:
-- Form creazione/modifica
-- Lista task
-- Filtri per stato e priorità
-- Pulsanti funzionanti per completare ed eliminare
-
-Testa ogni operazione prima di procedere.
+Ensure the application is fully runnable and usable before moving to the next step.
 
 ---
 
-# 3 - Ricerca veloce e cache con Redis
+# 2 - Task management with MongoDB and TodoWrite
 
-Aggiungi un sistema di ricerca avanzata delle attività.
+Replace the mock task storage with MongoDB.
 
-Implementa:
-- Barra di ricerca globale
-- Ricerca per titolo e descrizione
-- Filtri combinabili per categoria, priorità e stato
-- Aggiornamento risultati in tempo reale
+Each task must contain:
+- Title
+- Description
+- Category
+- Priority (low, medium, high)
+- Due date
+- Status (todo, in progress, completed)
+- Creation date
 
-Usa Redis per:
-- Memorizzare temporaneamente le ricerche frequenti
-- Migliorare la velocità di caricamento delle attività
-- Gestire eventuali dati temporanei della dashboard
+Create backend APIs or Nuvolaris OpenServerless actions to:
+- Create tasks
+- Read tasks
+- Update tasks
+- Delete tasks
 
-Mantieni la logica backend separata dal frontend.
+Integrate TodoWrite to manage task operations.
 
-Verifica che la ricerca funzioni anche con molte attività.
+Implement:
+- Create task form
+- Edit task form
+- Delete task action
+- Complete task action
+- Task list page
+- Filters by status and priority
 
----
-
-# 4 - Dashboard statistiche e miglioramento UI
-
-Realizza la dashboard principale con statistiche sulle attività.
-
-Mostra:
-- Numero totale attività
-- Attività completate
-- Attività ancora da completare
-- Attività in ritardo
-- Distribuzione per priorità
-- Distribuzione per categoria
-
-Crea componenti grafici semplici e leggibili.
-
-Migliora l'interfaccia usando Tailwind CSS:
-- Card statistiche
-- Tabelle o liste ordinate
-- Badge per stato e priorità
-- Design responsive desktop/mobile
-
-Aggiungi caricamenti, stati vuoti ed eventuali messaggi di errore.
+Verify the entire CRUD workflow works correctly before continuing.
 
 ---
 
-# 5 - Rifinitura, test e preparazione deploy
+# 3 - Fast search and Redis caching
 
-Controlla tutta l'applicazione Project Dashboard Task.
+Add a complete search and filtering system.
 
-Verifica:
-- Tutte le pagine sono raggiungibili
-- Tutti i pulsanti funzionano
-- CRUD attività completo
-- Ricerca veloce funzionante
-- Statistiche aggiornate automaticamente
-- Connessione MongoDB stabile
-- Cache Redis corretta
-- Funzioni Nuvolaris OpenServerless configurate
+Implement:
+- Global search bar
+- Search by title
+- Search by description
+- Filter by category
+- Filter by priority
+- Filter by status
+- Real-time search updates
 
-Migliora:
-- Gestione errori
+Use Redis to:
+- Cache frequently requested task lists
+- Cache common searches
+- Improve dashboard loading performance
+
+Ensure the application remains fully functional and testable after adding caching.
+
+---
+
+# 4 - Statistics dashboard and UI improvements
+
+Build the statistics dashboard.
+
+Display:
+- Total tasks
+- Completed tasks
+- Pending tasks
+- Overdue tasks
+- Tasks grouped by priority
+- Tasks grouped by category
+- Completion percentage
+
+Create clear dashboard cards and visual components.
+
+Improve the interface with Tailwind CSS:
+- Responsive layout
+- Status badges
+- Priority badges
+- Loading states
+- Empty states
+- Error states
+
+Statistics must update automatically whenever tasks change.
+
+---
+
+# 5 - Final polish, testing and deployment preparation
+
+Review the entire Project Dashboard Task application.
+
+Verify:
+- Navigation works correctly
+- All CRUD operations work
+- TodoWrite integration works
+- MongoDB integration works
+- Redis caching works
+- Search works correctly
+- Statistics update correctly
+- Responsive design works on all screen sizes
+- Nuvolaris OpenServerless functions are properly configured
+
+Improve:
+- Error handling
+- Code quality
 - Performance
-- Pulizia del codice
-- Responsive design
+- Accessibility
+- User experience
 
-Prepara la configurazione finale per il deploy.
+Prepare the application for deployment while keeping all features fully functional.
