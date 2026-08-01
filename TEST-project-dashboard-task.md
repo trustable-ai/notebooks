@@ -1,6 +1,8 @@
-# 1 - Project setup and initial working interface
+# 1 - Project setup and mobile-first foundation
 
 Create a new application called Project Dashboard Task using React and Tailwind CSS.
+
+Design the application using a mobile-first approach from the very beginning. Every page and component must be fully responsive instead of adapting a desktop layout later.
 
 Set up a clean architecture with:
 - Dashboard page
@@ -10,22 +12,60 @@ Set up a clean architecture with:
 
 Prepare the project structure for MongoDB, Redis, TodoWrite and Nuvolaris OpenServerless integrations without implementing them yet.
 
+Responsive requirements:
+
+- Use Tailwind CSS mobile-first utilities.
+- Use responsive breakpoints (sm, md, lg, xl).
+- Support screen widths from 320px to 1920px.
+- Never allow horizontal scrolling.
+- Avoid fixed widths whenever possible.
+- Use responsive Flexbox and CSS Grid layouts.
+- Buttons must have a minimum touch target of 44×44 px.
+- Components must never overflow their containers.
+- Use responsive spacing and typography.
+
+Navigation:
+- Desktop: left sidebar.
+- Tablet: collapsible sidebar.
+- Mobile: hamburger menu with slide-out drawer.
+
+Dashboard:
+- Desktop: multi-column layout.
+- Tablet: two-column layout.
+- Mobile: single-column layout with stacked cards.
+
+Tasks page:
+- Desktop: grid or table layout.
+- Mobile: stacked task cards.
+
+Forms:
+- Desktop: multi-column when appropriate.
+- Mobile: full-width inputs and vertically stacked buttons.
+
 Build a fully working first version containing:
-- Responsive layout
-- Appropriate button size
-- Sidebar or top navigation
 - Dashboard page
 - Tasks page
 - Basic task cards
 - Working navigation between pages
 
-Ensure the application is fully runnable and usable before moving to the next step.
+Validate the interface at:
+- 320px
+- 375px
+- 768px
+- 1024px
+- 1440px
+
+Fix every overflow, clipping or spacing issue before continuing.
+
+Ensure the application is fully runnable, usable and responsive before moving to the next step.
 
 ---
 
 # 2 - Task management with MongoDB and TodoWrite
 
-Replace the mock task storage with MongoDB.
+Maintain the existing mobile-first responsive design while adding new features.
+
+Replace the initial task storage with MongoDB.
 
 Each task must contain:
 - Title
@@ -50,13 +90,18 @@ Implement:
 - Delete task action
 - Complete task action
 - Task list page
-- Filters by status and priority
+- Filters by status
+- Filters by priority
 
-Verify the entire CRUD workflow works correctly before continuing.
+Ensure every new page, form and component remains fully responsive on all supported screen sizes.
+
+Verify the complete CRUD workflow before continuing.
 
 ---
 
 # 3 - Fast search and Redis caching
+
+Maintain the existing mobile-first responsive design while adding new features.
 
 Add a complete search and filtering system.
 
@@ -74,11 +119,15 @@ Use Redis to:
 - Cache common searches
 - Improve dashboard loading performance
 
-Ensure the application remains fully functional and testable after adding caching.
+Ensure search, filters and cached data work correctly on desktop, tablet and mobile.
+
+Verify the application remains fully functional before continuing.
 
 ---
 
-# 4 - Statistics dashboard and UI improvements
+# 4 - Statistics dashboard and interactive navigation
+
+Maintain the existing mobile-first responsive design while adding new features.
 
 Build the statistics dashboard.
 
@@ -91,155 +140,44 @@ Display:
 - Tasks grouped by category
 - Completion percentage
 
-Create clear dashboard cards and visual components.
+Create responsive dashboard cards and visual components.
 
-Improve the interface with Tailwind CSS:
-- Responsive layout
+Every statistics card must:
+- Be fully clickable.
+- Navigate to the Tasks page.
+- Automatically apply the appropriate filter.
+- Preserve the selected filter after navigation.
+
+Improve the interface with:
 - Status badges
 - Priority badges
 - Loading states
 - Empty states
 - Error states
 
+Charts and dashboard sections must resize correctly without overflow on every supported device.
+
 Statistics must update automatically whenever tasks change.
 
 ---
 
-# 5 - Final polish, testing and deployment preparation
+# 5 - Final polish, responsiveness validation and deployment preparation
 
 Review the entire Project Dashboard Task application.
 
 Verify:
-- Navigation works correctly
-- All CRUD operations work
-- TodoWrite integration works
-- MongoDB integration works
-- Redis caching works
-- Search works correctly
-- Statistics update correctly
-- Responsive design works on all screen sizes
-- Nuvolaris OpenServerless functions are properly configured
+- Navigation works correctly.
+- CRUD operations work correctly.
+- TodoWrite integration works.
+- MongoDB integration works.
+- Redis caching works.
+- Search works correctly.
+- Dashboard statistics update correctly.
+- Statistics cards navigate with the correct filters applied.
+- Responsive design works correctly.
+- Nuvolaris OpenServerless functions are properly configured.
 
-Improve:
-- Error handling
-- Code quality
-- Performance
-- Accessibility
-- User experience
-
-Prepare the application for deployment while keeping all features fully functional.
-
----
-
-# 6 - Mobile-first responsive redesign
-
-The current application is designed primarily for desktop. Completely redesign the layout using a mobile-first approach while preserving every existing feature and backend integration.
-
-Do not simply add responsive classes. Refactor the layout where necessary.
-
-## Global layout
-
-- Screens smaller than 768px must use a completely different layout optimized for phones.
-- No horizontal scrolling anywhere.
-- Every page must fit naturally inside the viewport.
-- Maximum content width should remain comfortable on large monitors.
-
-## Navigation
-
-Desktop:
-- Keep the left sidebar.
-
-Tablet:
-- Collapse the sidebar.
-
-Mobile:
-- Replace the sidebar with a hamburger menu and slide-out drawer.
-- The header must remain fixed at the top.
-- Navigation should never occupy permanent screen space.
-
-## Dashboard
-
-Desktop:
-- Keep the current dashboard style.
-
-Tablet:
-- Statistics cards in 2 columns.
-
-Mobile:
-- Statistics cards become a single vertical column.
-- Every chart becomes full width.
-- Recent Tasks moves below the charts.
-- Priority and Category sections stack vertically.
-- All cards use equal spacing and rounded corners.
-
-## Statistics cards
-
-Every statistics card must:
-- Be fully clickable.
-- Navigate to the Tasks page.
-- Automatically apply the correct filter.
-- Show hover, focus and active states.
-- Have a minimum touch target of 44px.
-
-## Tasks page
-
-Desktop:
-- Grid or table layout.
-
-Mobile:
-- Replace tables with stacked cards.
-- Every task card displays:
-  - Title
-  - Status
-  - Priority
-  - Category
-  - Due date
-  - Action buttons
-
-Buttons wrap naturally and never overflow.
-
-## Search and filters
-
-Desktop:
-- Horizontal toolbar.
-
-Tablet:
-- Wrap into multiple rows.
-
-Mobile:
-- Filters collapse inside a "Filters" expandable section.
-- Search bar uses full width.
-
-## Forms
-
-On mobile:
-- Every input uses full width.
-- Buttons stack vertically.
-- Dialogs never exceed screen width.
-- Comfortable spacing between controls.
-
-## Charts
-
-Charts must resize automatically.
-
-No chart may overflow its container.
-
-If a chart is too wide, redesign it rather than shrinking it.
-
-## Responsive breakpoints
-
-Use Tailwind breakpoints:
-
-- <640px → Mobile
-- 640–767px → Large Mobile
-- 768–1023px → Tablet
-- 1024–1279px → Laptop
-- ≥1280px → Desktop
-
-## Validation
-
-Test and fix the UI at:
-
+Validate the interface at:
 - 320px
 - 375px
 - 390px
@@ -249,6 +187,21 @@ Test and fix the UI at:
 - 1440px
 - 1920px
 
-Fix every overflow, clipping, spacing issue, alignment issue and unusable interaction.
+Fix:
+- Horizontal scrolling
+- Overflow
+- Clipping
+- Misaligned layouts
+- Broken grids
+- Incorrect spacing
+- Components exceeding viewport width
+- Responsive regressions
 
-The final result should feel like a modern production-quality SaaS application with a dedicated mobile experience, not a desktop interface that simply shrinks.
+Improve:
+- Error handling
+- Performance
+- Accessibility
+- User experience
+- Code quality
+
+Prepare the application for deployment while keeping every feature fully functional and maintaining a production-quality responsive experience across all supported devices.
