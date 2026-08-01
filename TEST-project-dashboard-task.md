@@ -12,11 +12,10 @@ Prepare the project structure for MongoDB, Redis, TodoWrite and Nuvolaris OpenSe
 
 Build a fully working first version containing:
 - Responsive layout
+- Appropriate button size
 - Sidebar or top navigation
 - Dashboard page
 - Tasks page
-- Local mock tasks stored in memory
-- Ability to mark mock tasks as completed
 - Basic task cards
 - Working navigation between pages
 
