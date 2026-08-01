@@ -128,3 +128,42 @@ Improve:
 - User experience
 
 Prepare the application for deployment while keeping all features fully functional.
+
+---
+
+# 6 - Interactive dashboard, clickable statistics and full mobile responsiveness
+
+Enhance the Project Dashboard Task application by improving navigation, usability and responsiveness.
+
+Make every statistics card on the Home Dashboard fully clickable.
+
+Clicking a statistics card must automatically navigate to the Tasks page with the corresponding filters already applied. Examples:
+- Total Tasks → show all tasks
+- Completed Tasks → show only completed tasks
+- Pending Tasks → show only pending tasks
+- Overdue Tasks → show only overdue tasks
+- High Priority → show only high priority tasks
+- A category card → show only tasks from that category
+
+Ensure filters are synchronized with the URL or application state so they persist after navigation.
+
+Improve the overall user experience by:
+- Adding hover, focus and active states
+- Making cards keyboard accessible
+- Displaying clear loading and empty states
+- Preserving selected filters when returning to the dashboard
+
+Make the entire application fully mobile responsive.
+
+Optimize every page for phones, tablets and desktops by ensuring:
+- Responsive navigation
+- Responsive dashboard cards
+- Responsive task list and forms
+- Proper spacing and typography on small screens
+- No horizontal scrolling
+- Buttons remain easy to tap
+- Dialogs and forms fit small displays
+- Statistics cards wrap correctly
+- Tables become responsive cards when necessary
+
+Review every page and component to guarantee a consistent responsive layout, smooth navigation and a polished user experience across all supported screen sizes.
