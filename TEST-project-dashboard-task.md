@@ -131,59 +131,124 @@ Prepare the application for deployment while keeping all features fully function
 
 ---
 
-# 6 - Complete responsive redesign and interactive dashboard
+# 6 - Mobile-first responsive redesign
 
-Completely redesign the UI to provide a true mobile-first responsive experience without changing any existing functionality.
+The current application is designed primarily for desktop. Completely redesign the layout using a mobile-first approach while preserving every existing feature and backend integration.
 
-Every page, component and layout must be reviewed and refactored if necessary.
+Do not simply add responsive classes. Refactor the layout where necessary.
 
-Responsive requirements:
+## Global layout
 
-- Use Tailwind responsive breakpoints (sm, md, lg, xl).
-- Design mobile-first, then progressively enhance for larger screens.
-- There must never be horizontal scrolling.
-- Every page must be fully usable at widths from 320px to 1920px.
+- Screens smaller than 768px must use a completely different layout optimized for phones.
+- No horizontal scrolling anywhere.
+- Every page must fit naturally inside the viewport.
+- Maximum content width should remain comfortable on large monitors.
 
-Navigation:
-- On mobile replace the sidebar with a hamburger menu or slide drawer.
-- Collapse navigation when screen width is small.
-- Keep navigation accessible on every device.
+## Navigation
 
-Dashboard:
-- Statistic cards must become a 1-column layout on phones.
-- Use 2 columns on tablets.
-- Use 3–4 columns on desktop depending on available space.
-- Cards must have equal height.
-- Cards must never overflow.
+Desktop:
+- Keep the left sidebar.
 
-Interactive statistics:
-- Every statistic card must be clickable.
-- Clicking a card opens the Tasks page with the correct filter already applied.
-- Selected filters remain active until changed by the user.
+Tablet:
+- Collapse the sidebar.
 
-Task list:
-- Replace desktop tables with stacked task cards on mobile.
-- Desktop may continue using a table or grid.
-- Buttons must wrap correctly.
-- Long titles must truncate gracefully.
-- Filters become collapsible on small screens.
+Mobile:
+- Replace the sidebar with a hamburger menu and slide-out drawer.
+- The header must remain fixed at the top.
+- Navigation should never occupy permanent screen space.
 
-Forms:
-- Inputs occupy full width on phones.
-- Buttons stack vertically when necessary.
-- Labels remain readable.
-- Dialogs never exceed viewport width.
+## Dashboard
 
-General UI:
-- All buttons must have a minimum touch target of 44×44 px.
-- Typography scales using responsive Tailwind classes.
-- Consistent spacing across breakpoints.
-- Images and icons scale correctly.
-- Cards, modals and containers adapt fluidly.
+Desktop:
+- Keep the current dashboard style.
 
-Quality checks:
-- Test layouts at approximately 320px, 375px, 768px, 1024px, 1440px and 1920px.
-- Fix every overflow, clipping, misalignment or broken layout.
-- Preserve all existing functionality while improving only the UI and responsiveness.
+Tablet:
+- Statistics cards in 2 columns.
 
-The application should feel like a production-quality responsive web app, not simply a desktop layout that shrinks on mobile.
+Mobile:
+- Statistics cards become a single vertical column.
+- Every chart becomes full width.
+- Recent Tasks moves below the charts.
+- Priority and Category sections stack vertically.
+- All cards use equal spacing and rounded corners.
+
+## Statistics cards
+
+Every statistics card must:
+- Be fully clickable.
+- Navigate to the Tasks page.
+- Automatically apply the correct filter.
+- Show hover, focus and active states.
+- Have a minimum touch target of 44px.
+
+## Tasks page
+
+Desktop:
+- Grid or table layout.
+
+Mobile:
+- Replace tables with stacked cards.
+- Every task card displays:
+  - Title
+  - Status
+  - Priority
+  - Category
+  - Due date
+  - Action buttons
+
+Buttons wrap naturally and never overflow.
+
+## Search and filters
+
+Desktop:
+- Horizontal toolbar.
+
+Tablet:
+- Wrap into multiple rows.
+
+Mobile:
+- Filters collapse inside a "Filters" expandable section.
+- Search bar uses full width.
+
+## Forms
+
+On mobile:
+- Every input uses full width.
+- Buttons stack vertically.
+- Dialogs never exceed screen width.
+- Comfortable spacing between controls.
+
+## Charts
+
+Charts must resize automatically.
+
+No chart may overflow its container.
+
+If a chart is too wide, redesign it rather than shrinking it.
+
+## Responsive breakpoints
+
+Use Tailwind breakpoints:
+
+- <640px → Mobile
+- 640–767px → Large Mobile
+- 768–1023px → Tablet
+- 1024–1279px → Laptop
+- ≥1280px → Desktop
+
+## Validation
+
+Test and fix the UI at:
+
+- 320px
+- 375px
+- 390px
+- 430px
+- 768px
+- 1024px
+- 1440px
+- 1920px
+
+Fix every overflow, clipping, spacing issue, alignment issue and unusable interaction.
+
+The final result should feel like a modern production-quality SaaS application with a dedicated mobile experience, not a desktop interface that simply shrinks.
