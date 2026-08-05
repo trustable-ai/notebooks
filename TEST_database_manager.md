@@ -1,7 +1,5 @@
 # Database manager
 
----
-
 # 1 - Transform the AI Chat into a Visual PostgreSQL Workspace (Foundation)
 
 Transform the existing AI-powered chat into a premium PostgreSQL workspace where AI is the engine behind the interface—not the interface itself.
