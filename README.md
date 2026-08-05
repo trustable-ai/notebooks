@@ -15,4 +15,4 @@
 
 - [Project Dashboard Task](TEST-project-dashboard-task.md)
 
-- [test Database Manager](TEST_database_manager.md)
+- [test Email Manager](TEST_email_manager.md)
