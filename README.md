@@ -16,3 +16,5 @@
 - [Project Dashboard Task](TEST-project-dashboard-task.md)
 
 - [test Email Manager](TEST_email_manager.md)
+
+- [test Doc Manager](TEST-document-manager.md)
